@@ -12,9 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "fastify": "^3.17.0",
-    "fastify-decorators": "^3.10.0",
-    "path": "^0.12.7"
+    "fastify": "^3.17.0"
   },
   "devDependencies": {
     "@tsconfig/node14": "^1.0.1",
