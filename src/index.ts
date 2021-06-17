@@ -1,14 +1,15 @@
-import { createServer, IncomingMessage, ServerResponse } from 'http';
+import { fastify } from 'fastify';
 
-const port = 5000;
+const server = fastify({ logger: true });
 
-const server = createServer(
-  (req: IncomingMessage, res: ServerResponse): void => {
-    res.statusCode = 200;
-    res.setHeader('Content-type', 'text/plain');
-    res.write('Hello, TypeScript!');
-    res.end();
+server.get('/', (_, reply) => {
+  reply.send({ hello: 'world' });
+});
+
+server.listen(3000, (err, address) => {
+  if (err) {
+    server.log.error(err);
+    process.exit(1);
   }
-);
-
-server.listen(port);
+  server.log.info(`server listening on ${address}`);
+});
