@@ -1,29 +1,28 @@
 import { fastify } from 'fastify';
-import { request } from 'http';
+import { Static, Type } from '@sinclair/typebox';
 
-interface IQuerystring {
-  username: string;
-  password: string;
-}
+const User = Type.Object({
+  name: Type.String(),
+  mail: Type.Optional(Type.String({ format: 'email' })),
+});
 
-interface IHeaders {
-  'h-Custom': string;
-}
+type UserType = Static<typeof User>;
 
 const server = fastify({ logger: true });
 
-server.get<{ Querystring: IQuerystring; Headers: IHeaders }>(
-  '/auth',
+server.post<{ Body: UserType; Response: UserType }>(
+  '/',
   {
-    preValidation: (request, reply, done) => {
-      const { username, password } = request.query;
-      done(username !== 'admin' ? new Error('Must be admin') : undefined);
+    schema: {
+      body: User,
+      response: {
+        200: User,
+      },
     },
   },
-  async (request, reply) => {
-    const customHeader = request.headers['h-Custom'];
-
-    return `logged in!`;
+  (req, rep) => {
+    const { body: user } = req;
+    rep.status(200).send(user);
   }
 );
 
