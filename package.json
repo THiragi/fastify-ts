@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@sinclair/typebox": "^0.16.7",
     "fastify": "^3.17.0"
   },
   "devDependencies": {
