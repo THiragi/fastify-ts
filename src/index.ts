@@ -20,8 +20,8 @@ const schema = {
 };
 
 const handler = (req: FastifyRequest, rep: FastifyReply) => {
-  const { body: user } = req;
-  rep.status(200).send(user);
+  const { body } = req;
+  rep.status(200).send(body);
 };
 
 type PostType = {
