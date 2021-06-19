@@ -1,40 +1,44 @@
-import { fastify, FastifyRequest, FastifyReply } from 'fastify';
+import { fastify, FastifyInstance, RouteShorthandOptions } from 'fastify';
+import { Server, IncomingMessage, ServerResponse } from 'http';
 import { Static, Type } from '@sinclair/typebox';
+import BlogRoutes from './routes/blogs';
 
-const server = fastify({ logger: true });
-
-const User = Type.Object({
-  name: Type.String(),
-  mail: Type.Optional(Type.String({ format: 'email' })),
+const app: FastifyInstance<Server, IncomingMessage, ServerResponse> = fastify({
+  logger: true,
 });
 
-type UserType = Static<typeof User>;
+const BodyScheme = Type.Object({
+  title: Type.String(),
+});
 
-const schema = {
+type BodyType = Static<typeof BodyScheme>;
+
+const ResponseSchema = Type.Object({
+  id: Type.Number(),
+  title: Type.String(),
+});
+
+const options: RouteShorthandOptions = {
   schema: {
-    body: User,
+    body: BodyScheme,
     response: {
-      200: User,
+      200: ResponseSchema,
     },
   },
 };
 
-const handler = (req: FastifyRequest, rep: FastifyReply) => {
-  const { body } = req;
-  rep.status(200).send(body);
-};
+app.get('/', (_, reply) => {
+  reply.send({ hello: 'World' });
+});
 
-type PostType = {
-  Body: UserType;
-  Response: UserType;
-};
+BlogRoutes.forEach((route) => {
+  app.route(route);
+});
 
-server.post<PostType>('/', schema, handler);
-
-server.listen(3000, (err, address) => {
+app.listen(3000, (err, address) => {
   if (err) {
-    server.log.error(err);
+    app.log.error(err);
     process.exit(1);
   }
-  server.log.info(`server listening on ${address}`);
+  app.log.info(`server listening on ${address}`);
 });
