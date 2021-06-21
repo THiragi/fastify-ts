@@ -16,6 +16,11 @@ const routes: RouteConfig = {
     url: '/feed',
     handler: Controller.getAllPosts,
   },
+  users: {
+    method: 'GET',
+    url: '/users',
+    handler: Controller.getAllUsers,
+  },
 };
 
 export const renderRoutes = Object.values(routes);
