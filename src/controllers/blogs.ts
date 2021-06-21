@@ -38,15 +38,12 @@ export const getAllUsers: RouteHandlerMethod = async (_, res) => {
   }
 };
 
-// export const getUser: RequestHandler<{ Params: { id?: string } }> = async (
-//   req,
-//   res
-// ) => {
-//   const { id } = req.params;
-//   const user = await prisma.user.findUnique({
-//     where: {
-//       id: Number(id),
-//     },
-//   });
-//   res.send({ data: user });
-// };
+export const getUser: RouteHandlerMethod = async (req, res) => {
+  const { id } = req.params as { id: string }; // FIXME: just i don't like it
+  const user = await prisma.user.findUnique({
+    where: {
+      id: Number(id),
+    },
+  });
+  res.send({ data: user });
+};

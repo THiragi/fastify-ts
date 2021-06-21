@@ -21,6 +21,11 @@ const routes: RouteConfig = {
     url: '/users',
     handler: Controller.getAllUsers,
   },
+  user: {
+    method: 'GET',
+    url: '/user/:id',
+    handler: Controller.getUser,
+  },
 };
 
 export const renderRoutes = Object.values(routes);
