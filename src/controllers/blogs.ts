@@ -1,19 +1,5 @@
-import {
-  RouteHandlerMethod,
-  // RawServerDefault,
-  // RawRequestDefaultExpression,
-  // RawReplyDefaultExpression,
-} from 'fastify';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
-
-// type RequestHandler<Request> = RouteHandlerMethod<
-//   RawServerDefault,
-//   RawRequestDefaultExpression<RawServerDefault>,
-//   RawReplyDefaultExpression<RawServerDefault>,
-//   Request
-// >;
+import { RouteHandlerMethod } from 'fastify';
+import { prisma } from '../helpers/utils';
 
 export const getAllPosts: RouteHandlerMethod = async (_, res) => {
   try {
@@ -26,24 +12,4 @@ export const getAllPosts: RouteHandlerMethod = async (_, res) => {
     console.error('posts', err);
     res.status(500).send({ error: `Cannot fetch posts` });
   }
-};
-
-export const getAllUsers: RouteHandlerMethod = async (_, res) => {
-  try {
-    const users = await prisma.user.findMany();
-    res.send({ data: users });
-  } catch (err) {
-    console.error('users', err);
-    res.status(500).send({ error: 'Cannot fetch users' });
-  }
-};
-
-export const getUser: RouteHandlerMethod = async (req, res) => {
-  const { id } = req.params as { id: string }; // FIXME: just i don't like it
-  const user = await prisma.user.findUnique({
-    where: {
-      id: Number(id),
-    },
-  });
-  res.send({ data: user });
 };
